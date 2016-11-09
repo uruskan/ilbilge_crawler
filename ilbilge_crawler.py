@@ -1,35 +1,36 @@
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import requests , re
+import requests , re , os
+os.system("setterm -term linux -foreground red")
 print("""
 Pardus Topluluk İlbilge Ekibi
 Author : ShockvaWe - Yusuf Umut Piynar
-Date : 06/11/2016 Gece 3 
+Date : 06/11/2016 Gece 3 -- Bilinmiyor 
 Caffein : 600mg
 Description : Python Web Crawler For İlbilge
+VERSION : v0.001 (Daha Geliştiririm Bunu Ama Sonunda Bişey Başardım :D)
 """)
-try :
-    def crawlla():
-        url = input("Lütfen url giriniz Örnek Format : http://www.google.com \n @>> ")
-        r = requests.get(url) 
-        print("Http request/istek kodu geldi =>> " + str(r.status_code)) #sunucudan gelen http kodu
-        kaynak_dosyasi = open("/home/eski/Masaüstü/python/html_kaynak.txt","w")
-        html_içerik = str(r.content) #r.content ile sitedeki html içeriği çekiyoruz
-        print("Evet sorun olmadığına göre , html içerik çekiliyor... \n")
-        kaynak_dosyasi.write(html_içerik) #içeriği str'ye dönüştürüp text dosyasına kaydediyoruz
-        kaynak_dosyasi.close() #dosyayı kapatak ki kaynak yemesin hem kapatmak lazım yani :D
-        print("Html içerik html_kaynak.txt dosyasına kaydedildi !\n")
-        sitedeki_linkler = re.findall('<a href="(.*?)">(.*?)</a>', str(r.content)) #htmlenin içindeki diğer linkleri buluyor
-        for link in sitedeki_linkler : #siteden başka sitelere linklere atlamak için..
-            if link[0] == '/' : #eğer html içinde 1 link "/" ile başlıyorsa onun başına bulunduğu sitenin urlsini koyarak sitede ilerlemeye çalışıyor örnek : ilbilge.tk + /arkaplan gibi
-                yeni_url = url + link
-                b = 1
-                d = b+".txt"
-                r_2 = requests.get(yeni_url)
-                yeni_dosya = open('d' , 'w')
-                yeni_dosya.write(r_2)
-                yeni_dosya.close()
-                b += 1
-    crawlla() #ve fonksiyonumuzu çalıştırıyoruz :D
-except : #eğer siteye bağlantıda sorun çıkarsa program çok garip hatalar veriyordu onun önüne geçmek için :D
-    print("MUHTEMELEN Siteye bağlantida sorun yaşaniliyor...")
-    
+os.system("setterm -term linux -foreground green")
+ilk_url = input("Url Giriniz .. \n @>> ") #URL'yi aldık
+r = requests.get(ilk_url) #Siteyi Çekdik
+print("Http'den Dönen Kod : " + str(r.status_code)) #Bağlantı hakkında bilgi verelim 
+if r.status_code == 404 :         
+    print("404 Not Found :D :D ")
+elif r.status_code == 200 :
+    print("Bağlantı Başarılı !")
+alt_linkler = re.findall('<a href="([^"]+)">', str(r.content)) #Bütün linkleri bulduk
+print("Sitedeki linkler bulunuyor") 
+dosya = open('alt_linkler.txt','w') #Dosyayı for döngüsünün dışında açmak önemli.
+for urll in alt_linkler : #şimdi bu döngüde başında / olan linkleri buluyor ve onları ana site linkiyle
+    if urll[0] == '/':    #eşliyor
+        print("Varsa Alt Linkler Bulunuyor...")
+        ilk_url + urll = yeni_t_url #Tamamlanmış link oluşturuldu
+        dosya.write(yeni_t_url)
+        print("Sitenin alt linkleri alt_linkler.txt'e kaydediliyor...")
+dosya.close() #ve for döngüsünün dışında kapatmak :D
+dosya2 = open('diger_linkler.txt','w')
+for url in alt_linkler:#başında / bulunmayan linkleri çekiyor
+    if url[0] != '/' :
+        print("Sitedeki diğer linkler diger_linkler.txt'e kaydediliyor..")
+        dosya2.write(url) #dosyaları for içinde yazıp
+dosya2.close() #for dışında kapatıyoruz.
