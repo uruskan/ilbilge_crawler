@@ -4,11 +4,10 @@ import requests , re , os
 os.system("setterm -term linux -foreground red")
 print("""
 Pardus Topluluk İlbilge Ekibi
-Author : ShockvaWe - Yusuf Umut Piynar
-Date : 06/11/2016 Gece 3 -- Bilinmiyor 
-Caffein : 600mg
+Author : Yusuf Umut Piynar
+Date : 06/11/2016 3am 
 Description : Python Web Crawler For İlbilge
-VERSION : v0.001 (Daha Geliştiririm Bunu Ama Sonunda Bişey Başardım :D)
+VERSION : v0.001 
 """)
 os.system("setterm -term linux -foreground green")
 ilk_url = input("Url Giriniz .. \n @>> ") #URL'yi aldık
